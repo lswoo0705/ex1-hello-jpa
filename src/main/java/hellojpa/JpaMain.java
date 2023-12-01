@@ -73,11 +73,17 @@ public class JpaMain {
 //            System.out.println("====== 쿼리 확인 =====");
 
             // 변경 감지로 엔티티 수정 - JPA는 값이 바뀌면 트랜젝션이 커밋되는 시점에 변경을 반영한다.
-            Member member = em.find(Member.class, 150L); // 객체 찾아와서
-            member.setName("ZZZZZ"); // 셋 네임으로 바꿔주기만 해도 적용됨
+//            Member member = em.find(Member.class, 150L); // 객체 찾아와서
+//            member.setName("ZZZZZ"); // 셋 네임으로 바꿔주기만 해도 적용됨
 //            em.persist(member); // 오히려 persist 쓰면 안됨
 
-            tx.commit(); // 적용하기 -> 이 때 쿼리가 날아감
+            // 플러시(직접 db에 반영)
+            Member member = new Member(200L, "member200");
+            em.persist(member);
+            em.flush(); // commit 전에 미리 db에 반영하고싶을 때 수동 플러시
+
+            System.out.println("=== COMMIT ===");
+            tx.commit(); // 변경 내용을 db에 반영(플러시) -> 이 때 쿼리가 날아감
         } catch (Exception e) {
             tx.rollback();
         } finally {
