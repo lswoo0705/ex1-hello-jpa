@@ -39,15 +39,22 @@ public class JpaMain {
 //            em.persist(findMember);
 
             // 리스트로 나타내기
-            List<Member> result = em.createQuery("select m from Member as m", Member.class)
-                    .setFirstResult(1)
-                    .setMaxResults(10)
-                    .getResultList();
-            for (Member member : result) {
-                System.out.println("member.name = " + member.getName());
-            }
+//            List<Member> result = em.createQuery("select m from Member as m", Member.class)
+//                    .setFirstResult(1)
+//                    .setMaxResults(10)
+//                    .getResultList();
+//            for (Member member : result) {
+//                System.out.println("member.name = " + member.getName());
+//            }
 
-            tx.commit(); // 적용하기
+            // 비영속 상태
+            Member member = new Member();
+            member.setId(100L);
+            member.setName("HelloJPA");
+            // 영속 상태
+            em.persist(member); // 아직 db에 저장하지 않음
+
+            tx.commit(); // 적용하기 -> 이 때 쿼리가 날아감
         } catch (Exception e) {
             tx.rollback();
         } finally {
