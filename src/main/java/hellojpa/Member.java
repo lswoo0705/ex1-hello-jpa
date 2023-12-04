@@ -1,14 +1,14 @@
 package hellojpa;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "MBR")
 public class Member {
     @Id
     private Long id;
+    @Column(unique = true, length = 10) // DDL 생성 기능
     private String name;
 
     public Member() {
