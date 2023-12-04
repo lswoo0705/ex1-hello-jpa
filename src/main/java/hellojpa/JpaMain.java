@@ -83,12 +83,19 @@ public class JpaMain {
 //            em.flush(); // commit 전에 미리 db에 반영하고싶을 때 수동 플러시
 
             // 준영속
-            Member member = em.find(Member.class, 150L); // 찾아올 때 영속상태
-            member.setName("AAAAA");
-            // JPA에서 관리하지 않는 준영속 상태가 됨 -> name 업데이트(commit)가 되지 않는다.
-            em.detach(member); // 특정 Entity만
-            em.clear(); // em안에 영속성 컨텍스트 전부 지움
-            em.close(); // 영속성 컨텍스트를 종료
+//            Member member = em.find(Member.class, 150L); // 찾아올 때 영속상태
+//            member.setName("AAAAA");
+//            // JPA에서 관리하지 않는 준영속 상태가 됨 -> name 업데이트(commit)가 되지 않는다.
+//            em.detach(member); // 특정 Entity만
+//            em.clear(); // em안에 영속성 컨텍스트 전부 지움
+//            em.close(); // 영속성 컨텍스트를 종료
+
+            Member member = new Member();
+            member.setId(3L);
+            member.setUsername("C");
+            member.setRoleType(RoleType.GUEST);
+
+            em.persist(member);
 
             System.out.println("=== COMMIT ===");
             tx.commit(); // 변경 내용을 db에 반영(플러시) -> 이 때 쿼리가 날아감
