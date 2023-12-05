@@ -90,26 +90,26 @@ public class JpaMain {
 //            em.clear(); // em안에 영속성 컨텍스트 전부 지움
 //            em.close(); // 영속성 컨텍스트를 종료
 
-            Member member1 = new Member();
-            member1.setUsername("A");
+            // 단방향 연관관계 저장
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
 
-            Member member2 = new Member();
-            member2.setUsername("B");
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setTeam(team);
+            em.persist(member);
 
-            Member member3 = new Member();
-            member3.setUsername("C");
+            em.flush();
+            em.clear();
 
-            System.out.println("============");
+            Member findMember = em.find(Member.class, member.getId());
 
-            em.persist(member1);
-            em.persist(member2);
-            em.persist(member3);
+            Team findTeam = findMember.getTeam();
+            System.out.println("findTeam = " + findTeam.getName());
 
-            System.out.println("member1 = " + member1.getId());
-            System.out.println("member2 = " + member2.getId());
-            System.out.println("member3 = " + member3.getId());
-
-            System.out.println("============");
+//            em.find(Team.class, 100L);
+//            findMember.setTeam(newTeam);
 
             tx.commit(); // 변경 내용을 db에 반영(플러시) -> 이 때 쿼리가 날아감
         } catch (Exception e) {
