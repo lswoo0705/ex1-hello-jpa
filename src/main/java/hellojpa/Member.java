@@ -3,11 +3,6 @@ package hellojpa;
 import jakarta.persistence.*;
 
 @Entity
-@SequenceGenerator(
-        name = "MEMBER_SEQ_GENERATOR",
-        sequenceName = "MEMBER_SEQ", //매핑할 데이터베이스 시퀀스 이름
-        initialValue = 1, allocationSize = 50)
-
 public class Member {
     @Id
     @GeneratedValue
@@ -15,9 +10,6 @@ public class Member {
     private Long id;
     @Column(name = "USERNAME")
     private String username;
-//    @Column(name = "TEAM_ID")
-//    private Long teamId;
-
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
     private Team team;

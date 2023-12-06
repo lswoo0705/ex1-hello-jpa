@@ -15,21 +15,8 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private List<Member> members = new ArrayList<>();
 
-    public void addMember(Member member) {
-        member.setTeam(this);
-        members.add(member);
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public List<Member> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<Member> members) {
-        this.members = members;
     }
 
     public void setId(Long id) {
@@ -42,14 +29,5 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Team{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", members=" + members +
-                '}';
     }
 }
