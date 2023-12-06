@@ -11,7 +11,7 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
     @ManyToOne
-    @JoinColumn(name = "TEAM_ID")
+    @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false) // 읽기 전용 필드를 사용해서 양방향처럼 사용
     private Team team;
 
     public Long getId() {
@@ -30,22 +30,6 @@ public class Member {
         this.username = username;
     }
 
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
-    @Override
-    public String toString() {
-        return "Member{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", team=" + team +
-                '}';
-    }
 
     //    private int age;
 //    @Enumerated(EnumType.STRING) // ORDINARY 사용하면 혼동 위험이 있으니 사용하지 말것
