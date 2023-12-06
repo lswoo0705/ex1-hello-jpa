@@ -13,6 +13,9 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false) // 읽기 전용 필드를 사용해서 양방향처럼 사용
     private Team team;
+    @OneToOne
+    @JoinColumn(name = "LOCKER_ID")
+    private Locker locker;
 
     public Long getId() {
         return id;
