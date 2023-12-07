@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -90,19 +91,15 @@ public class JpaMain {
 //            em.clear(); // em안에 영속성 컨텍스트 전부 지움
 //            em.close(); // 영속성 컨텍스트를 종료
 
-            Movie movie = new Movie();
-            movie.setDirector("감독a");
-            movie.setActor("배우a");
-            movie.setName("영화a");
-            movie.setPrice(10000);
+            Member member = new Member();
+            member.setUsername("user");
+            member.setCreatedBy("Kim");
+            member.setCreatedDate(LocalDateTime.now());
 
-            em.persist(movie);
+            em.persist(member);
 
             em.flush();
             em.clear();
-
-            Movie findMovie = em.find(Movie.class, movie.getId());
-            System.out.println("findMovie = " + findMovie);
 
             tx.commit(); // 변경 내용을 db에 반영(플러시) -> 이 때 쿼리가 날아감
         } catch (Exception e) {
