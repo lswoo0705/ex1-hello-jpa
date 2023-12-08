@@ -4,9 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import org.hibernate.Hibernate;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -91,19 +89,47 @@ public class JpaMain {
 //            em.clear(); // em안에 영속성 컨텍스트 전부 지움
 //            em.close(); // 영속성 컨텍스트를 종료
 
-            Member member = new Member();
-            member.setUsername("user");
-            member.setCreatedBy("Kim");
-            member.setCreatedDate(LocalDateTime.now());
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            em.persist(member1);
 
-            em.persist(member);
+            Member member2 = new Member();
+            member2.setUsername("member2");
+            em.persist(member2);
 
             em.flush();
             em.clear();
 
+
+//            Member findMember = em.getReference(Member.class, member.getId());
+//            System.out.println("findMember.id = " + findMember.getId()); // 가짜를 가져왔기 때문에 쿼리를 날리지 않음
+//            System.out.println("findMember.username = " + findMember.getUsername()); // db에서 가져와야하기 때문에 쿼리를 날림
+
+//
+//            Member m1 = em.find(Member.class, member1.getId());
+//            Member m2 = em.find(Member.class, member2.getId());
+//            System.out.println("m1 == m2 : " + (m1.getClass() == m2.getClass())); // true
+
+//            Member m1 = em.find(Member.class, member1.getId());
+//            Member m2 = em.getReference(Member.class, member2.getId());
+//            System.out.println("m1 == m2 : " + (m1.getClass() == m2.getClass())); // false
+
+
+//            Member m1 = em.find(Member.class, member1.getId());
+//            System.out.println("m1 = " + m1.getClass()); // m1 = class hellojpa.Member
+//
+//            Member reference = em.getReference(Member.class, member1.getId());
+//            System.out.println("reference = " + reference.getClass()); // reference = class hellojpa.Member
+
+
+            Member refMember = em.getReference(Member.class, member1.getId());
+            System.out.println("refMember = " + refMember.getClass()); // Proxy
+            Hibernate.initialize(refMember); // 강제 초기화
+
             tx.commit(); // 변경 내용을 db에 반영(플러시) -> 이 때 쿼리가 날아감
         } catch (Exception e) {
             tx.rollback();
+            e.printStackTrace();
         } finally {
             em.close();
         }

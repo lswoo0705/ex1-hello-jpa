@@ -16,11 +16,11 @@ public class Member extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false) // 읽기 전용 필드를 사용해서 양방향처럼 사용
     private Team team;
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
-    @OneToMany(mappedBy = "member")
-    private List<MemberProduct> memberProducts = new ArrayList<>();
+//    @OneToOne
+//    @JoinColumn(name = "LOCKER_ID")
+//    private Locker locker;
+//    @OneToMany(mappedBy = "member")
+//    private List<MemberProduct> memberProducts = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -38,7 +38,13 @@ public class Member extends BaseEntity{
         this.username = username;
     }
 
+    public Team getTeam() {
+        return team;
+    }
 
+    public void setTeam(Team team) {
+        this.team = team;
+    }
     //    private int age;
 //    @Enumerated(EnumType.STRING) // ORDINARY 사용하면 혼동 위험이 있으니 사용하지 말것
 //    private RoleType roleType;
