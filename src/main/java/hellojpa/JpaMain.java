@@ -128,25 +128,56 @@ public class JpaMain {
 //            Hibernate.initialize(refMember); // 강제 초기화
 
 
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
+//            Team team = new Team();
+//            team.setName("teamA");
+//            em.persist(team);
+//
+//            Member member1 = new Member();
+//            member1.setUsername("member1");
+//            member1.setTeam(team);
+//            em.persist(member1);
+//
+//            em.flush();
+//            em.clear();
+//
+//            Member m = em.find(Member.class, member1.getId());
+//
+//            System.out.println("m = " + m.getTeam().getClass());
+//
+//            System.out.println("=========");
+//            m.getTeam().getName(); // 초기화 시점
+//            System.out.println("=========");
 
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            member1.setTeam(team);
-            em.persist(member1);
+
+            // 영속성 전이(CASCADE)
+//            Child child1 = new Child();
+//            Child child2 = new Child();
+//
+//            Parent parent = new Parent();
+//            parent.addChild(child1);
+//            parent.addChild(child2);
+//
+//            em.persist(parent);
+//            // child는 persist하지 않기 때문에 에러
+//            // -> Parent OneToMany에 cascade로 해결
+//            // child도 persist가 된다
+
+
+            // 고아 객체
+            Child child1 = new Child();
+            Child child2 = new Child();
+
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
 
             em.flush();
             em.clear();
 
-            Member m = em.find(Member.class, member1.getId());
-
-            System.out.println("m = " + m.getTeam().getClass());
-
-            System.out.println("=========");
-            m.getTeam().getName(); // 초기화 시점
-            System.out.println("=========");
+            Parent findParent = em.find(Parent.class, parent.getId());
+            findParent.getChildList().remove(0);
 
 
             tx.commit(); // 변경 내용을 db에 반영(플러시) -> 이 때 쿼리가 날아감
