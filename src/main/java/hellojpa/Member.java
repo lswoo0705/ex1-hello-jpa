@@ -2,9 +2,6 @@ package hellojpa;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 public class Member extends BaseEntity{
     @Id
@@ -13,8 +10,8 @@ public class Member extends BaseEntity{
     private Long id;
     @Column(name = "USERNAME")
     private String username;
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false) // 읽기 전용 필드를 사용해서 양방향처럼 사용
+    @ManyToOne(fetch = FetchType.LAZY) // 가급적 지연로딩을 사용
+    @JoinColumn(name = "TEAM_ID") // 읽기 전용 필드를 사용해서 양방향처럼 사용
     private Team team;
 //    @OneToOne
 //    @JoinColumn(name = "LOCKER_ID")
