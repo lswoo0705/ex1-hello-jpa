@@ -181,12 +181,33 @@ public class JpaMain {
 
 
             // 임베디드 타입
-            Member member = new Member();
-            member.setUsername("hello");
-            member.setHomeAddress(new Address("city", "street", "10000"));
-            member.setWorkPeriod(new Period());
+//            Member member = new Member();
+//            member.setUsername("hello");
+//            member.setHomeAddress(new Address("city", "street", "10000"));
+//            member.setWorkPeriod(new Period());
+//
+//            em.persist(member);
 
-            em.persist(member);
+
+            Address address = new Address("city", "street", "10000");
+
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            member1.setHomeAddress(address);
+            em.persist(member1);
+
+            Address newAddress = new Address("NewCity", address.getStreet(), address.getZipcode());
+            member1.setHomeAddress(newAddress);
+
+            Member member2 = new Member();
+            member2.setUsername("member2");
+            member2.setHomeAddress(address);
+            em.persist(member2);
+
+            // member1만 newCity로 바꾸려했지만
+//            member1.getHomeAddress().setCity("newCity");
+            // 실행결과 member2도 같이 newCity로 변경됨
+            // address의 복사본인 copyAddress를 만들어서 따로 지정해줘야함
 
             tx.commit(); // 변경 내용을 db에 반영(플러시) -> 이 때 쿼리가 날아감
         } catch (Exception e) {
