@@ -4,6 +4,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Hibernate;
 
 import java.util.List;
@@ -215,21 +218,21 @@ public class JpaMain {
 
             // 값 타입 컬렉션
             // 값 타입 저장
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setHomeAddress(new Address("homeCity", "street", "10000"));
-
-            member.getFavoriteFoods().add("치킨");
-            member.getFavoriteFoods().add("족발");
-            member.getFavoriteFoods().add("피자");
-
-            member.getAddressHistory().add(new AddressEntity("old1", "street", "10000"));
-            member.getAddressHistory().add(new AddressEntity("old2", "street", "10000"));
-
-            em.persist(member);
-
-            em.flush();
-            em.clear();
+//            Member member = new Member();
+//            member.setUsername("member1");
+//            member.setHomeAddress(new Address("homeCity", "street", "10000"));
+//
+//            member.getFavoriteFoods().add("치킨");
+//            member.getFavoriteFoods().add("족발");
+//            member.getFavoriteFoods().add("피자");
+//
+//            member.getAddressHistory().add(new AddressEntity("old1", "street", "10000"));
+//            member.getAddressHistory().add(new AddressEntity("old2", "street", "10000"));
+//
+//            em.persist(member);
+//
+//            em.flush();
+//            em.clear();
 
             // 값 타입 조회
 //            System.out.println("============= START =============");
@@ -262,6 +265,38 @@ public class JpaMain {
 
             // 값 타입 컬렉션에 변경 사항이 있으면, 주인 엔티티와 연관된 모든 데이터를 삭제하고, 값 타입 결렉션에 있는 현재 값을 모두 다시 저장한다.
 
+            // ===========================================================
+
+            // JPGL - 객체지향 SQL
+//            List<Member> result = em.createQuery(
+//                    "select m from Member m where m.username like 'kim'",
+//                    Member.class
+//            ).getResultList();
+//
+//            for (Member member : result) {
+//                System.out.println("member = " + member);
+//            }
+
+            // JPA Criteria - 복잡해서 유지보수에 어려움
+//            CriteriaBuilder cb = em.getCriteriaBuilder();
+//            CriteriaQuery<Member> query = cb.createQuery(Member.class);
+//
+//            Root<Member> m = query.from(Member.class);
+//
+//            CriteriaQuery<Member> cq = query.select(m);
+//
+//            String username = "asdf";
+//            if (username != null) {
+//                cq.where(cb.equal(m.get("username"), "kim"));
+//            }
+//
+//            List<Member> resultList = em.createQuery(cq).getResultList();
+
+            // QueryDSL - 자바 코드로 JPQL을 작성
+
+            // Native SQL - 특정 DB에 의존적인 기능
+//            em.createNativeQuery("select MEMBER_ID, city, street, zipcode, USERNAME from MEMBER")
+//                            .getResultList();
 
             tx.commit(); // 변경 내용을 db에 반영(플러시) -> 이 때 쿼리가 날아감
         } catch (Exception e) {
