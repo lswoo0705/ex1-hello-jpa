@@ -6,6 +6,9 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import org.hibernate.Hibernate;
 
+import java.util.List;
+import java.util.Set;
+
 public class JpaMain {
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -189,25 +192,76 @@ public class JpaMain {
 //            em.persist(member);
 
 
-            Address address = new Address("city", "street", "10000");
-
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            member1.setHomeAddress(address);
-            em.persist(member1);
-
-            Address newAddress = new Address("NewCity", address.getStreet(), address.getZipcode());
-            member1.setHomeAddress(newAddress);
-
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            member2.setHomeAddress(address);
-            em.persist(member2);
+//            Address address = new Address("city", "street", "10000");
+//
+//            Member member1 = new Member();
+//            member1.setUsername("member1");
+//            member1.setHomeAddress(address);
+//            em.persist(member1);
+//
+//            Address newAddress = new Address("NewCity", address.getStreet(), address.getZipcode());
+//            member1.setHomeAddress(newAddress);
+//
+//            Member member2 = new Member();
+//            member2.setUsername("member2");
+//            member2.setHomeAddress(address);
+//            em.persist(member2);
 
             // member1만 newCity로 바꾸려했지만
 //            member1.getHomeAddress().setCity("newCity");
             // 실행결과 member2도 같이 newCity로 변경됨
             // address의 복사본인 copyAddress를 만들어서 따로 지정해줘야함
+
+
+            // 값 타입 컬렉션
+            // 값 타입 저장
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setHomeAddress(new Address("homeCity", "street", "10000"));
+
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("족발");
+            member.getFavoriteFoods().add("피자");
+
+            member.getAddressHistory().add(new AddressEntity("old1", "street", "10000"));
+            member.getAddressHistory().add(new AddressEntity("old2", "street", "10000"));
+
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            // 값 타입 조회
+//            System.out.println("============= START =============");
+//            Member findMember = em.find(Member.class, member.getId());
+//
+//            List<Address> addressHistory = findMember.getAddressHistory();
+//            for (Address address : addressHistory) {
+//                System.out.println("address = " + address.getCity());
+//            }
+//
+//            Set<String> favoriteFoods = findMember.getFavoriteFoods();
+//            for (String favoriteFood : favoriteFoods) {
+//                System.out.println("favoriteFood = " + favoriteFood);
+//            }
+
+            // 값 타입 수정
+//            System.out.println("============= START =============");
+//            Member findMember = em.find(Member.class, member.getId());
+//
+//            // homeCity -> newCity
+//            Address newHome = findMember.getHomeAddress();
+//            findMember.setHomeAddress(new Address("newCity", newHome.getStreet(), newHome.getZipcode()));
+//
+//            // 치킨 -> 한식
+//            findMember.getFavoriteFoods().remove("치킨");
+//            findMember.getFavoriteFoods().add("한식");
+//
+//            findMember.getAddressHistory().remove(new Address("old1", "street", "10000"));
+//            findMember.getAddressHistory().add(new Address("newCity1", "street", "10000"));
+
+            // 값 타입 컬렉션에 변경 사항이 있으면, 주인 엔티티와 연관된 모든 데이터를 삭제하고, 값 타입 결렉션에 있는 현재 값을 모두 다시 저장한다.
+
 
             tx.commit(); // 변경 내용을 db에 반영(플러시) -> 이 때 쿼리가 날아감
         } catch (Exception e) {
