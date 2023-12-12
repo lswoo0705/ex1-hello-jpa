@@ -2,22 +2,30 @@ package hellojpa;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
-public class Member extends BaseEntity{
+public class Member{
     @Id
     @GeneratedValue
     @Column(name = "MEMBER_ID")
     private Long id;
     @Column(name = "USERNAME")
     private String username;
-    @ManyToOne(fetch = FetchType.LAZY) // 가급적 지연로딩을 사용
-    @JoinColumn(name = "TEAM_ID") // 읽기 전용 필드를 사용해서 양방향처럼 사용
-    private Team team;
-//    @OneToOne
-//    @JoinColumn(name = "LOCKER_ID")
-//    private Locker locker;
-//    @OneToMany(mappedBy = "member")
-//    private List<MemberProduct> memberProducts = new ArrayList<>();
+    @Embedded
+    private Period workPeriod;
+    @Embedded
+    private Address homeAddress;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city",
+                    column = @Column(name = "WORK_CITY")),
+            @AttributeOverride(name = "street",
+                    column = @Column(name = "WORK_STREET")),
+            @AttributeOverride(name = "zipcode",
+                    column = @Column(name = "WORK_ZIPCODE")),
+    })
+    private Address workAddress;
 
     public Long getId() {
         return id;
@@ -35,24 +43,19 @@ public class Member extends BaseEntity{
         this.username = username;
     }
 
-    public Team getTeam() {
-        return team;
+    public Period getWorkPeriod() {
+        return workPeriod;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setWorkPeriod(Period workPeriod) {
+        this.workPeriod = workPeriod;
     }
-    //    private int age;
-//    @Enumerated(EnumType.STRING) // ORDINARY 사용하면 혼동 위험이 있으니 사용하지 말것
-//    private RoleType roleType;
-//    @Temporal(TemporalType.TIMESTAMP)
-//    private Date createdDate;
-//    @Temporal(TemporalType.TIMESTAMP)
-//    private Date LastModifiedDate;
-//    private LocalDate testLocalDate; // 년, 월, 일
-//    private LocalDateTime testLocalDateTime; // 년, 월, 일, 시각
-//    @Lob // 매핑하는 필드 타입이 문자면 CLOB 매핑, 나머지는 BLOB 매핑
-//    private String description;
-//    @Transient // DB에 관계없이 메모리에만 사용하고 싶을 때
-//    private int temp;
+
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
+    }
 }
